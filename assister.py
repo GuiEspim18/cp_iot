@@ -2,10 +2,10 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import time
-# import serial
+import serial
 
 # Configurar porta serial (ajuste para a sua porta)
-# arduino = serial.Serial('COM5', 9600, timeout=1)
+arduino = serial.Serial('/dev/cu.usbmodem1201', 9600, timeout=1)
 time.sleep(2)
 
 # Inicializa MediaPipe
@@ -51,8 +51,10 @@ while True:
 
     if falling_detected:
         cv2.putText(frame, "QUEDA DETECTADA!", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
-        # arduino.write(b'1')
+        arduino.write(b'1')
         falling_detected = False  # Previne múltiplos alertas
+    else:
+        arduino.write(b'0')
 
     cv2.imshow("Monitor de Queda", frame)
 
@@ -62,4 +64,4 @@ while True:
 # Finaliza
 cap.release()
 cv2.destroyAllWindows()
-# arduino.close()
+arduino.close()
